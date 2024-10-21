@@ -93,7 +93,6 @@ fun Home(navHostController: NavHostController) {
             .padding(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        // Dropdown for selecting grade
         Box(modifier = Modifier.fillMaxWidth()) {
 
         }
@@ -137,7 +136,6 @@ fun Home(navHostController: NavHostController) {
             )
             Button(
                 onClick = {
-                    // Perform your search logic here
                 },
                 modifier = Modifier
                     .height(56.dp)
@@ -301,22 +299,6 @@ fun saveProfilePicture(uri: String, context: Context) {
     val editor = sharedPreferences.edit()
     editor.putString("profile_picture_uri", uri)
     editor.apply()
-}
-
-fun loadProfilePicture(context: Context): String? {
-    val sharedPreferences = context.getSharedPreferences("UserProfile", Context.MODE_PRIVATE)
-    return sharedPreferences.getString("profile_picture_uri", null)
-}
-
-fun saveImageToInternalStorage(uri: Uri, context: Context): String {
-    val inputStream = context.contentResolver.openInputStream(uri)
-    val file = File(context.filesDir, "profile_picture.png")
-    inputStream.use { input ->
-        file.outputStream().use { output ->
-            input?.copyTo(output)
-        }
-    }
-    return file.absolutePath
 }
 
 // Bottom Navigation Bar
