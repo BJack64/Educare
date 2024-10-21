@@ -289,7 +289,7 @@ fun Profile(context: Context) {
         Spacer(modifier = Modifier.height(16.dp))
 
         Button(onClick = { launcher.launch("image/*") }) {
-            Text("Change Profile Picture")
+            Text("Ubah Foto Profile")
         }
     }
 }
