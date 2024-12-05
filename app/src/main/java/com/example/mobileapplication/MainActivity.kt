@@ -1,371 +1,127 @@
 package com.example.mobileapplication
 
-import android.content.Context
-import android.net.Uri
 import android.os.Bundle
 import androidx.activity.ComponentActivity
-import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.compose.setContent
-import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.AccountCircle
-import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.Search
-import androidx.navigation.NavHostController
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.unit.sp
-import coil.compose.rememberAsyncImagePainter
-import kotlinx.serialization.Serializable
-import coil.request.ImageRequest
 
-@Serializable
-object Home
-
-@Serializable
-object Profile
-
-@Serializable
-object Indonesia
-
-@Serializable
-object Matematika
-
-@Serializable
-object IPA
-
-@Serializable
-object IPS
-
-@Serializable
-object PKN
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             MaterialTheme {
-                val navController = rememberNavController()
-                BottomNavBar(navHostController = navController)
+                Navigation()
             }
         }
     }
 }
 
-// Halaman Dashboard
-
 @Composable
-fun Home(navHostController: NavHostController) {
-    var text by remember { mutableStateOf("") }
-    var expanded by remember { mutableStateOf(false) }
-    var selectedGrade by remember { mutableStateOf("SD") }
-    val grades = listOf("SD", "SMP", "SMA")
-
-    Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(16.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
+fun Opening(modifier: Modifier = Modifier) {
+    Box(
+        modifier = modifier
+            .requiredWidth(width = 430.dp)
+            .requiredHeight(height = 932.dp)
+            .background(color = Color(0xffc6cbe0))
     ) {
-        Box(modifier = Modifier.fillMaxWidth()) {
-
-        }
-
-        Spacer(modifier = Modifier.height(16.dp))
-
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically
+        Image(
+            painter = painterResource(id = R.drawable.ic_profile_placeholder),
+            contentDescription = "Rectangle 39372",
+            modifier = Modifier
+                .align(alignment = Alignment.TopStart)
+                .offset(x = 15.dp,
+                    y = 16.dp)
+                .requiredWidth(width = 400.dp)
+                .requiredHeight(height = 900.dp)
+                .clip(shape = RoundedCornerShape(20.dp)))
+        Image(
+            painter = painterResource(id = R.drawable.ic_profile_placeholder),
+            contentDescription = "Rectangle 39373",
+            modifier = Modifier
+                .align(alignment = Alignment.TopStart)
+                .offset(x = 30.dp,
+                    y = 31.dp)
+                .requiredWidth(width = 370.dp)
+                .requiredHeight(height = 870.dp)
+                .clip(shape = RoundedCornerShape(20.dp)))
+        Box(
+            modifier = Modifier
+                .align(alignment = Alignment.TopStart)
+                .offset(x = 35.dp,
+                    y = 36.dp)
+                .requiredWidth(width = 360.dp)
+                .requiredHeight(height = 860.dp)
+                .clip(shape = RoundedCornerShape(20.dp))
+                .background(color = Color(0xfff6f2f2))
+                .border(border = BorderStroke(1.dp, Color.Black.copy(alpha = 0.1f)),
+                    shape = RoundedCornerShape(20.dp)))
+        Box(
+            modifier = Modifier
+                .align(alignment = Alignment.TopStart)
+                .offset(x = 65.dp,
+                    y = 316.dp)
+                .requiredSize(size = 300.dp)
         ) {
-            Button(
-                onClick = { expanded = true },
+            Box(
                 modifier = Modifier
-                    .height(56.dp)
-                    .width(80.dp)
-            ) {
-                Text(selectedGrade)
-            }
-            DropdownMenu(
-                expanded = expanded,
-                onDismissRequest = { expanded = false }
-            ) {
-                grades.forEach { grade ->
-                    DropdownMenuItem(
-                        text = { Text(grade) },
-                        onClick = {
-                            selectedGrade = grade
-                            expanded = false
-                        }
-                    )
-                }
-            }
-            TextField(
-                value = text,
-                onValueChange = { text = it },
-                placeholder = { Text(text = "Cari Pelajaran") },
-                modifier = Modifier
-                    .weight(1f)
-                    .padding(end = 4.dp),
-                singleLine = true
-            )
-            Button(
-                onClick = {
-                },
-                modifier = Modifier
-                    .height(56.dp)
-                    .width(75.dp)
-            ) {
-                Icon(
-                    imageVector = Icons.Filled.Search,
-                    contentDescription = "Search"
-                )
-            }
-        }
-
-        Spacer(modifier = Modifier.height(20.dp))
-        Text("Materi Rekomendasi",
-            fontSize = 25.sp)
-        Spacer(modifier = Modifier.height(20.dp))
-
-        LessonList(
-            navHostController = navHostController,
-            buttonItems = listOf(
-                "Bahasa Indonesia",
-                "Matematika",
-                "Ilmu Pengetahuan Alam",
-                "Ilmu Pengetahuan Sosial",
-                "Pendidikan Kewarganegaraan"
-            )
-        )
-    }
-}
-
-// Daftar Materi Rekomendasi
-
-@Composable
-fun LessonList(navHostController: NavHostController, buttonItems: List<String>) {
-    LazyColumn(
-        modifier = Modifier.fillMaxSize(),
-        verticalArrangement = Arrangement.spacedBy(16.dp)
-    ) {
-        items(buttonItems) { item ->
-            Button(
-                onClick = {
-                    when (item) {
-                        "Bahasa Indonesia" -> navHostController.navigate("Indonesia")
-                        "Matematika" -> navHostController.navigate("Matematika")
-                        "Ilmu Pengetahuan Alam" -> navHostController.navigate("IPA")
-                        "Ilmu Pengetahuan Sosial" -> navHostController.navigate("IPS")
-                        "Pendidikan Kewarganegaraan" -> navHostController.navigate("PKN")
-                    }
-                },
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                Text(text = item)
-            }
-        }
-    }
-}
-
-@Composable
-fun Indonesia() {
-    Column(
-        modifier = Modifier.fillMaxSize(),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
-    ) {
-        Text("Indonesia")
-    }
-}
-
-@Composable
-fun Matematika() {
-    Column(
-        modifier = Modifier.fillMaxSize(),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
-    ) {
-        Text("Matematika")
-    }
-}
-
-@Composable
-fun IPA() {
-    Column(
-        modifier = Modifier.fillMaxSize(),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
-    ) {
-        Text("IPA")
-    }
-}
-
-@Composable
-fun IPS() {
-    Column(
-        modifier = Modifier.fillMaxSize(),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
-    ) {
-        Text("IPS")
-    }
-}
-
-@Composable
-fun PKN() {
-    Column(
-        modifier = Modifier.fillMaxSize(),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
-    ) {
-        Text("PKN")
-    }
-}
-
-// Halaman Profile
-// Test
-
-@Composable
-fun Profile(context: Context) {
-    var imageUri by remember { mutableStateOf<Uri?>(null) }
-    val launcher = rememberLauncherForActivityResult(ActivityResultContracts.GetContent()) { uri ->
-        uri?.let {
-            imageUri = it
-            saveProfilePicture(it.toString(), context)
-        }
-    }
-
-    Column(
-        modifier = Modifier.fillMaxSize(),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
-    ) {
-        if (imageUri != null) {
-            Image(
-                painter = rememberAsyncImagePainter(
-                    ImageRequest.Builder(LocalContext.current).data(imageUri).build()
-                ),
-                contentDescription = "Profile Picture",
-                modifier = Modifier
-                    .size(128.dp)
-                    .clip(CircleShape)
-            )
-        } else {
+                    .requiredSize(size = 300.dp)
+                    .clip(shape = CircleShape)
+                    .background(color = Color.White))
             Image(
                 painter = painterResource(id = R.drawable.ic_profile_placeholder),
-                contentDescription = "Default Profile Picture",
+                contentDescription = "WhatsApp Image 2024-10-28 at 15.17.37 1",
                 modifier = Modifier
-                    .size(128.dp)
-                    .clip(CircleShape)
-            )
-        }
-
-        Spacer(modifier = Modifier.height(16.dp))
-
-        Button(onClick = { launcher.launch("image/*") }) {
-            Text("Ubah Foto Profile")
+                    .align(alignment = Alignment.TopStart)
+                    .offset(x = 49.5.dp,
+                        y = 40.5.dp)
+                    .requiredWidth(width = 201.dp)
+                    .requiredHeight(height = 219.dp))
         }
     }
 }
-
-fun saveProfilePicture(uri: String, context: Context) {
-    val sharedPreferences = context.getSharedPreferences("UserProfile", Context.MODE_PRIVATE)
-    val editor = sharedPreferences.edit()
-    editor.putString("profile_picture_uri", uri)
-    editor.apply()
-}
-
-// Bottom Navigation Bar
 
 @Composable
-fun BottomNavBar(navHostController: NavHostController) {
-    Surface(
-        modifier = Modifier.fillMaxSize(),
-        color = MaterialTheme.colorScheme.background
-    ) {
-        val navBackStackEntry by navHostController.currentBackStackEntryAsState()
-        val currentRoute = navBackStackEntry?.destination?.route
+fun Navigation() {
+    val navController = rememberNavController()
 
-        Scaffold(
-            bottomBar = {
-                NavigationBar {
-                    NavigationBarItem(
-                        selected = currentRoute == "Home",
-                        icon = {
-                            Icon(
-                                imageVector = Icons.Filled.Home,
-                                contentDescription = "Home"
-                            )
-                        },
-                        onClick = {
-                            navHostController.navigate("Home") {
-                            }
-                        },
-                    )
-                    NavigationBarItem(
-                        selected = currentRoute == "Profile",
-                        icon = {
-                            Icon(
-                                imageVector = Icons.Filled.AccountCircle,
-                                contentDescription = "Profile"
-                            )
-                        },
-                        onClick = {
-                            navHostController.navigate("Profile") {
-                            }
-                        },
-                    )
-                }
-            }
-        ) { innerPadding ->
-            NavHost(
-                navController = navHostController,
-                startDestination = "Home",
-                modifier = Modifier.padding(innerPadding)
-            ) {
-                composable("Home") {
-                    Home(navHostController = navHostController)
-                }
-
-                composable("Profile") {
-                    val context = LocalContext.current
-                    Profile(context = context)
-                }
-                composable("Indonesia") {
-                    Indonesia()
-                }
-                composable("Matematika") {
-                    Matematika()
-                }
-                composable("IPA") {
-                    IPA()
-                }
-                composable("IPS") {
-                    IPS()
-                }
-                composable("PKN") {
-                    PKN()
-                }
-            }
-        }
+    NavHost(navController = navController, startDestination = "home") {
+        composable("home") { Home(navController) }
+        composable("indonesia") { Indonesia(navController) }
+        composable("matematika") { Matematika(navController) }
+        composable("inggris") { Inggris(navController) }
+        composable("ipa") { IPA(navController) }
+        composable("ips") { IPS(navController) }
+        composable("pkn") { PKN(navController) }
     }
+}
+
+@Preview
+@Composable
+private fun OpeningPreview() {
+    Opening(Modifier)
+}
+
+@Preview()
+@Composable
+private fun HomePreview() {
+    Home(navController = rememberNavController(), Modifier)
 }
