@@ -111,6 +111,10 @@ fun Navigation() {
         composable("ipa") { IPA(navController) }
         composable("ips") { IPS(navController) }
         composable("pkn") { PKN(navController) }
+        composable("materi") { Materi(navController) }
+        composable("quiz") { Quiz(navController) }
+        composable("hasil") { HasilQuiz(navController) }
+        composable("review") { ReviewQuiz(navController) }
     }
 }
 

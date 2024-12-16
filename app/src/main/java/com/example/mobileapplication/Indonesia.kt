@@ -142,8 +142,11 @@ fun Indonesia(navController: NavController, modifier: Modifier = Modifier) {
                     .requiredHeight(height = 111.dp)
                     .clip(shape = RoundedCornerShape(10.dp))
                     .background(color = Color(0xfff6f2f2))
-                    .border(border = BorderStroke(1.dp, Color.Black.copy(alpha = 0.05f)),
-                        shape = RoundedCornerShape(10.dp)))
+                    .border(border = BorderStroke(1.dp, Color.Black.copy(alpha = 0.05f)), shape = RoundedCornerShape(10.dp))
+                    .clickable {
+                        navController.navigate("materi")
+                    }
+            )
             Image(
                 painter = painterResource(id = R.drawable.logo_ind),
                 contentDescription = "Logo Bahasa Indonesia",
@@ -593,4 +596,3 @@ fun Indonesia(navController: NavController, modifier: Modifier = Modifier) {
         }
     }
 }
-
