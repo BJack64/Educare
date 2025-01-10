@@ -1,3 +1,5 @@
+LA20 - Mobile Application Programming
+
 Giovanni Daniel Setiadi - 2602088361 - Full Stack Developer
 
 Nicholas Emmanuel Kara - 2602112360 - Back End Developer
