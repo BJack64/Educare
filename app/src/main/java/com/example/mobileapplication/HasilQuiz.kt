@@ -1,5 +1,6 @@
 package com.example.mobileapplication
 
+import android.util.Log
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
@@ -28,12 +29,49 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.foundation.layout.Box
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavController
 
 @Composable
-fun HasilQuiz(navController: NavController, modifier: Modifier = Modifier) {
+fun HasilQuiz(navController: NavController, modifier: Modifier = Modifier, matpel: String?, materi: String?, hasil: Int?) {
+    val score = hasil?.times(20) ?: 0
+    val endPercentageX = (score / 100f).coerceIn(0f, 1f)
+    val boxWidthDp = 357.dp
+    val boxHeightDp = 37.dp
+    val boxWidthPx = with(LocalDensity.current) { boxWidthDp.toPx() }
+    val boxHeightPx = with(LocalDensity.current) { boxHeightDp.toPx() }
+
+
+    val backgroundImg = if (matpel == "indonesia") {
+        R.drawable.bg_ind
+    } else if (matpel == "matematika") {
+        R.drawable.bg_mat
+    } else if (matpel == "inggris") {
+        R.drawable.bg_ing
+    } else if (matpel == "ipa") {
+        R.drawable.bg_ipa
+    } else if (matpel == "ips") {
+        R.drawable.bg_ips
+    } else {
+        R.drawable.bg_pkn
+    }
+
+    val logoImg = if (matpel == "indonesia") {
+        R.drawable.logo_ind
+    } else if (matpel == "matematika") {
+        R.drawable.logo_mtk
+    } else if (matpel == "inggris") {
+        R.drawable.logo_ing
+    } else if (matpel == "ipa") {
+        R.drawable.logo_ipa
+    } else if (matpel == "ips") {
+        R.drawable.logo_ips
+    } else {
+        R.drawable.logo_pkn
+    }
+
     Box(
         modifier = modifier
             .requiredWidth(width = 430.dp)
@@ -49,7 +87,7 @@ fun HasilQuiz(navController: NavController, modifier: Modifier = Modifier) {
                 .requiredHeight(height = 909.dp)
         ) {
             Image(
-                painter = painterResource(id = R.drawable.bg_hasil_quiz_indo),
+                painter = painterResource(id = backgroundImg),
                 contentDescription = "Rectangle 39372",
                 modifier = Modifier
                     .align(alignment = Alignment.TopStart)
@@ -143,7 +181,7 @@ fun HasilQuiz(navController: NavController, modifier: Modifier = Modifier) {
                 )
 
                 Text(
-                    text = "60%",
+                    text = "$score%",
                     color = Color.Black,
                     style = TextStyle(
                         fontSize = 40.sp),
@@ -151,10 +189,17 @@ fun HasilQuiz(navController: NavController, modifier: Modifier = Modifier) {
                         .align(alignment = Alignment.TopStart)
                         .offset(x = 154.dp,
                             y = 220.dp)
-                        .requiredWidth(width = 75.dp)
+                        .requiredWidth(width = 100.dp)
                         .requiredHeight(height = 38.dp))
                 Text(
-                    text = "Lakukan review dan pelajari lagi materi bersangkutan!",
+                    text = when {
+                        score == 100 -> "Score sempurna! Good job!"
+                        score >= 80 -> "Score kamu hampir sempurna! Baca ulang materi!"
+                        score >= 60 -> "Baca ulang materi dengan baik ya!"
+                        score >= 40 -> "Score kamu kurang baik nih, perhatikan materi dengan seksama ya!"
+                        score >= 20 -> "Wow skor kamu sangat kurang, perhatikan poin-poin penting dalam materi ya!"
+                        else -> "Heh? Mata kamu beneran kebuka kah?"
+                    },
                     color = Color.Black,
                     textAlign = TextAlign.Center,
                     style = TextStyle(
@@ -169,20 +214,19 @@ fun HasilQuiz(navController: NavController, modifier: Modifier = Modifier) {
                     modifier = Modifier
                         .align(Alignment.TopStart)
                         .offset(x = 10.dp, y = 277.dp)
-                        .requiredWidth(357.dp)
-                        .requiredHeight(37.dp)
+                        .requiredWidth(boxWidthDp)
+                        .requiredHeight(boxHeightDp)
                         .clip(RoundedCornerShape(30.dp))
-                        .background(
-                            brush = Brush.linearGradient(
-                                colors = listOf(
-                                    Color(0xff22ff00),
-                                    Color(0xffff0004)
-                                ),
-                                start = Offset(0f, 18.5f),
-                                end = Offset(957f, 18.5f)
-                            )
-                        )
-                )
+                        .background(Color(0xffff0004))
+                ){
+                    Box(
+                        modifier = Modifier
+                            .requiredHeight(boxHeightDp)
+                            .requiredWidth((boxWidthDp * endPercentageX))
+                            .clip(RoundedCornerShape(30.dp))
+                            .background(Color(0xff22ff00))
+                    )
+                }
 
                 Box(
                     modifier = Modifier
@@ -201,7 +245,7 @@ fun HasilQuiz(navController: NavController, modifier: Modifier = Modifier) {
                             .offset(x = -15.dp,)
                             .clip(shape = RoundedCornerShape(30.dp))
                             .clickable {
-                                navController.navigate("review")
+                                navController.navigate("review/$matpel/$materi")
                             })
                 }
             }
@@ -235,17 +279,46 @@ fun HasilQuiz(navController: NavController, modifier: Modifier = Modifier) {
                             .requiredWidth(width = 86.dp)
                             .requiredHeight(height = 86.dp)
                             .clip(CircleShape)
-                            .background(color = Color(0xffE82441).copy(alpha = 0.92f)))
+                            .background(color = when {
+                                matpel == "indonesia" -> Color(0xffE82441)
+                                matpel == "matematika" -> Color(0xff82CBD0)
+                                matpel == "inggris" -> Color(0xffDF7B64)
+                                matpel == "ipa" -> Color(0xff3295A4)
+                                matpel == "ips" -> Color(0xff36C354)
+                                else -> Color(0xffCA880D)
+                            }))
                     Image(
-                        painter = painterResource(id = R.drawable.logo_ind),
+                        painter = painterResource(id = logoImg),
                         contentDescription = "Rectangle 39384",
                         contentScale = ContentScale.Crop,
                         modifier = Modifier
                             .align(alignment = Alignment.TopStart)
-                            .offset(x = 0.dp,
-                                y = 4.138671875.dp)
-                            .requiredWidth(width = 99.dp)
-                            .requiredHeight(height = 79.dp))
+                            .offset(x =
+                                when {
+                                    matpel == "inggris" -> 13.dp
+                                    matpel == "pkn" -> 5.dp
+                                    else -> 0.dp
+                                },
+                                y =
+                                when {
+                                    matpel == "inggris" -> 10.dp
+                                    matpel == "pkn" -> 4.dp
+                                    else -> 4.138671875.dp
+                                },)
+                            .requiredWidth(
+                                when {
+                                    matpel == "inggris" -> 70.dp
+                                    matpel == "pkn" -> 95.dp
+                                    else -> 99.dp
+                                }
+                            )
+                            .requiredWidth(
+                                when {
+                                    matpel == "inggris" -> 50.dp
+                                    matpel == "pkn" -> 75.dp
+                                    else -> 79.dp
+                                }
+                            ))
                 }
                 Box(
                     modifier = Modifier
@@ -256,7 +329,7 @@ fun HasilQuiz(navController: NavController, modifier: Modifier = Modifier) {
                         .requiredHeight(height = 54.dp)
                 ) {
                     Text(
-                        text = "Quiz Pantun",
+                        text = "Hasil Quiz",
                         color = Color.Black,
                         textAlign = TextAlign.Center,
                         style = TextStyle(
@@ -268,8 +341,15 @@ fun HasilQuiz(navController: NavController, modifier: Modifier = Modifier) {
                             .requiredWidth(width = 225.dp)
                             .requiredHeight(height = 52.dp))
                     Text(
-                        text = "Quiz Pantun",
-                        color = Color(0xffe82441),
+                        text = "Hasil Quiz",
+                        color = when {
+                            matpel == "indonesia" -> Color(0xffE82441)
+                            matpel == "matematika" -> Color(0xff82CBD0)
+                            matpel == "inggris" -> Color(0xffDF7B64)
+                            matpel == "ipa" -> Color(0xff3295A4)
+                            matpel == "ips" -> Color(0xff36C354)
+                            else -> Color(0xffCA880D)
+                        },
                         textAlign = TextAlign.Center,
                         style = TextStyle(
                             fontSize = 40.sp),
@@ -290,10 +370,10 @@ fun HasilQuiz(navController: NavController, modifier: Modifier = Modifier) {
                     .requiredHeight(height = 55.dp)
                     .background(color = Color.Black.copy(alpha = 0.1f))
                     .clickable {
-                        navController.navigate("materi")
+                        navController.navigate("materi/$matpel/$materi")
                     })
             Text(
-                text = "Home > Materi > Bahasa Indonesia > Pantun > Quiz > Hasil",
+                text = "Home > Materi > $matpel > $materi > Quiz > Hasil",
                 color = Color.White,
                 textAlign = TextAlign.Center,
                 style = TextStyle(
@@ -301,25 +381,25 @@ fun HasilQuiz(navController: NavController, modifier: Modifier = Modifier) {
                 modifier = Modifier
                     .align(alignment = Alignment.TopStart)
                     .offset(x = 37.dp,
-                        y = 10.dp)
+                        y = 15.dp)
                     .requiredWidth(width = 410.dp))
         }
         Box(
             modifier = Modifier
                 .align(alignment = Alignment.TopStart)
-                .offset(x = 5.dp,
-                    y = 5.dp)
-                .requiredSize(size = 100.dp)
+                .offset(x = 10.dp,
+                    y = 8.dp)
+                .requiredSize(size = 200.dp)
         ) {
             Image(
                 painter = painterResource(id = R.drawable.logo_educare),
                 contentDescription = "Logo Educare",
                 modifier = Modifier
                     .align(alignment = Alignment.TopStart)
-                    .offset(x = 16.425048828125.dp,
-                        y = 40.0751953125.dp)
-                    .requiredWidth(width = 30.dp)
-                    .requiredHeight(height = 33.dp))
+                    .offset(x = 10.dp,
+                        y = 25.dp)
+                    .requiredWidth(width = 45.dp)
+                    .requiredHeight(height = 48.dp))
 
 
         }

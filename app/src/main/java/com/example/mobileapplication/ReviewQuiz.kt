@@ -1,7 +1,6 @@
 package com.example.mobileapplication
 
 import android.util.Log
-import android.widget.Toast
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
@@ -42,28 +41,10 @@ import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavController
-import com.google.gson.Gson
-
-fun HitungQuiz(selectedAnswers: List<String>, correctAnswers: List<String>): Int {
-    if (selectedAnswers.size != correctAnswers.size) {
-        return 0
-    }
-
-    var correctCount = 0
-
-    for (i in selectedAnswers.indices) {
-        if (selectedAnswers[i] == correctAnswers[i]) {
-            correctCount++
-        }
-    }
-    return correctCount
-}
 
 @Composable
-fun Quiz(navController: NavController, modifier: Modifier = Modifier, matpel: String?, materi: String?) {
-    val context = LocalContext.current
+fun ReviewQuiz(navController: NavController, modifier: Modifier = Modifier, matpel: String?, materi: String?) {
     var link by remember { mutableStateOf("") }
     var soal_1 by remember {mutableStateOf("")}
     var jwb1 by remember {mutableStateOf("")}
@@ -106,6 +87,21 @@ fun Quiz(navController: NavController, modifier: Modifier = Modifier, matpel: St
         R.drawable.bg_pkn
     }
 
+    val randomizedAnswers1 = remember { mutableStateListOf<String>() }
+    var jawabanTerpilih1 by remember { mutableStateOf("") }
+
+    val randomizedAnswers2 = remember { mutableStateListOf<String>() }
+    var jawabanTerpilih2 by remember { mutableStateOf("") }
+
+    val randomizedAnswers3 = remember { mutableStateListOf<String>() }
+    var jawabanTerpilih3 by remember { mutableStateOf("") }
+
+    val randomizedAnswers4 = remember { mutableStateListOf<String>() }
+    var jawabanTerpilih4 by remember { mutableStateOf("") }
+
+    val randomizedAnswers5 = remember { mutableStateListOf<String>() }
+    var jawabanTerpilih5 by remember { mutableStateOf("") }
+
     LaunchedEffect(Unit) {
         // Link
         firestoreHelper.readLinkMateri("$matpel", "$materi") { linkMateri ->
@@ -139,6 +135,11 @@ fun Quiz(navController: NavController, modifier: Modifier = Modifier, matpel: St
                 jwb1_4 = string
             }
         }
+        firestoreHelper.readQuiz("$matpel", "$materi", "jawaban", "terpilih1") { string ->
+            if (string != null) {
+                jawabanTerpilih1 = string
+            }
+        }
         // Soal 2
         firestoreHelper.readQuiz("$matpel", "$materi", "soal", "2") { string ->
             if (string != null) {
@@ -163,6 +164,11 @@ fun Quiz(navController: NavController, modifier: Modifier = Modifier, matpel: St
         firestoreHelper.readQuiz("$matpel", "$materi", "jawaban", "2_4") { string ->
             if (string != null) {
                 jwb2_4 = string
+            }
+        }
+        firestoreHelper.readQuiz("$matpel", "$materi", "jawaban", "terpilih2") { string ->
+            if (string != null) {
+                jawabanTerpilih2 = string
             }
         }
         // Soal 3
@@ -191,6 +197,11 @@ fun Quiz(navController: NavController, modifier: Modifier = Modifier, matpel: St
                 jwb3_4 = string
             }
         }
+        firestoreHelper.readQuiz("$matpel", "$materi", "jawaban", "terpilih3") { string ->
+            if (string != null) {
+                jawabanTerpilih3 = string
+            }
+        }
         // Soal 4
         firestoreHelper.readQuiz("$matpel", "$materi", "soal", "4") { string ->
             if (string != null) {
@@ -215,6 +226,11 @@ fun Quiz(navController: NavController, modifier: Modifier = Modifier, matpel: St
         firestoreHelper.readQuiz("$matpel", "$materi", "jawaban", "4_4") { string ->
             if (string != null) {
                 jwb4_4 = string
+            }
+        }
+        firestoreHelper.readQuiz("$matpel", "$materi", "jawaban", "terpilih4") { string ->
+            if (string != null) {
+                jawabanTerpilih4 = string
             }
         }
         // Soal 5
@@ -243,27 +259,12 @@ fun Quiz(navController: NavController, modifier: Modifier = Modifier, matpel: St
                 jwb5_4 = string
             }
         }
+        firestoreHelper.readQuiz("$matpel", "$materi", "jawaban", "terpilih5") { string ->
+            if (string != null) {
+                jawabanTerpilih5 = string
+            }
+        }
     }
-
-    val randomizedAnswers1 = remember { mutableStateListOf<String>() }
-    var jawabanTerpilih1 by remember { mutableStateOf("") }
-    var indexTerpilih1 by remember { mutableStateOf(-1) }
-
-    val randomizedAnswers2 = remember { mutableStateListOf<String>() }
-    var jawabanTerpilih2 by remember { mutableStateOf("") }
-    var indexTerpilih2 by remember { mutableStateOf(-1) }
-
-    val randomizedAnswers3 = remember { mutableStateListOf<String>() }
-    var jawabanTerpilih3 by remember { mutableStateOf("") }
-    var indexTerpilih3 by remember { mutableStateOf(-1) }
-
-    val randomizedAnswers4 = remember { mutableStateListOf<String>() }
-    var jawabanTerpilih4 by remember { mutableStateOf("") }
-    var indexTerpilih4 by remember { mutableStateOf(-1) }
-
-    val randomizedAnswers5 = remember { mutableStateListOf<String>() }
-    var jawabanTerpilih5 by remember { mutableStateOf("") }
-    var indexTerpilih5 by remember { mutableStateOf(-1) }
 
     LaunchedEffect(jwb1, jwb1_2, jwb1_3, jwb1_4) {
         if (jwb1.isNotEmpty() && jwb1_2.isNotEmpty() && jwb1_3.isNotEmpty() && jwb1_4.isNotEmpty()) {
@@ -388,13 +389,13 @@ fun Quiz(navController: NavController, modifier: Modifier = Modifier, matpel: St
                                         .requiredWidth(width = 160.dp)
                                         .wrapContentHeight()
                                         .background(
-                                            color = if (indexTerpilih1 == index) Color.Yellow else Color.Gray,
+                                            color = when {
+                                                jawaban == jwb1 -> Color.Green
+                                                jawaban == jawabanTerpilih1 && jawaban != jwb1 -> Color.Red
+                                                else -> Color.Gray
+                                            }
                                         )
                                         .clip(shape = RoundedCornerShape(30.dp))
-                                        .clickable {
-                                            jawabanTerpilih1 = jawaban
-                                            indexTerpilih1 = index
-                                        }
                                         .padding(horizontal = 8.dp, vertical = 4.dp)
                                 ) {
                                     Text(
@@ -426,13 +427,13 @@ fun Quiz(navController: NavController, modifier: Modifier = Modifier, matpel: St
                                         .requiredWidth(width = 160.dp)
                                         .wrapContentHeight()
                                         .background(
-                                            color = if (indexTerpilih1 == index) Color.Yellow else Color.Gray,
+                                            color = when {
+                                                jawaban == jwb1 -> Color.Green
+                                                jawaban == jawabanTerpilih1 && jawaban != jwb1 -> Color.Red
+                                                else -> Color.Gray
+                                            }
                                         )
                                         .clip(shape = RoundedCornerShape(30.dp))
-                                        .clickable {
-                                            jawabanTerpilih1 = jawaban
-                                            indexTerpilih1 = index
-                                        }
                                         .padding(horizontal = 8.dp, vertical = 4.dp)
                                 ) {
                                     Text(
@@ -493,13 +494,13 @@ fun Quiz(navController: NavController, modifier: Modifier = Modifier, matpel: St
                                         .requiredWidth(width = 160.dp)
                                         .wrapContentHeight()
                                         .background(
-                                            color = if (indexTerpilih2 == index) Color.Yellow else Color.Gray,
+                                            color = when {
+                                                jawaban == jwb2 -> Color.Green
+                                                jawaban == jawabanTerpilih2 && jawaban != jwb2 -> Color.Red
+                                                else -> Color.Gray
+                                            }
                                         )
                                         .clip(shape = RoundedCornerShape(30.dp))
-                                        .clickable {
-                                            jawabanTerpilih2 = jawaban
-                                            indexTerpilih2 = index
-                                        }
                                         .padding(horizontal = 8.dp, vertical = 4.dp)
                                 ) {
                                     Text(
@@ -531,13 +532,13 @@ fun Quiz(navController: NavController, modifier: Modifier = Modifier, matpel: St
                                         .requiredWidth(width = 160.dp)
                                         .wrapContentHeight()
                                         .background(
-                                            color = if (indexTerpilih2 == index) Color.Yellow else Color.Gray,
+                                            color = when {
+                                                jawaban == jwb2 -> Color.Green
+                                                jawaban == jawabanTerpilih2 && jawaban != jwb2 -> Color.Red
+                                                else -> Color.Gray
+                                            }
                                         )
                                         .clip(shape = RoundedCornerShape(30.dp))
-                                        .clickable {
-                                            jawabanTerpilih2 = jawaban
-                                            indexTerpilih2 = index
-                                        }
                                         .padding(horizontal = 8.dp, vertical = 4.dp)
                                 ) {
                                     Text(
@@ -598,13 +599,13 @@ fun Quiz(navController: NavController, modifier: Modifier = Modifier, matpel: St
                                         .requiredWidth(width = 160.dp)
                                         .wrapContentHeight()
                                         .background(
-                                            color = if (indexTerpilih3 == index) Color.Yellow else Color.Gray,
+                                            color = when {
+                                                jawaban == jwb3 -> Color.Green
+                                                jawaban == jawabanTerpilih3 && jawaban != jwb3 -> Color.Red
+                                                else -> Color.Gray
+                                            }
                                         )
                                         .clip(shape = RoundedCornerShape(30.dp))
-                                        .clickable {
-                                            jawabanTerpilih3 = jawaban
-                                            indexTerpilih3 = index
-                                        }
                                         .padding(horizontal = 8.dp, vertical = 4.dp)
                                 ) {
                                     Text(
@@ -636,13 +637,13 @@ fun Quiz(navController: NavController, modifier: Modifier = Modifier, matpel: St
                                         .requiredWidth(width = 160.dp)
                                         .wrapContentHeight()
                                         .background(
-                                            color = if (indexTerpilih3 == index) Color.Yellow else Color.Gray,
+                                            color = when {
+                                                jawaban == jwb3 -> Color.Green
+                                                jawaban == jawabanTerpilih3 && jawaban != jwb3 -> Color.Red
+                                                else -> Color.Gray
+                                            }
                                         )
                                         .clip(shape = RoundedCornerShape(30.dp))
-                                        .clickable {
-                                            jawabanTerpilih3 = jawaban
-                                            indexTerpilih3 = index
-                                        }
                                         .padding(horizontal = 8.dp, vertical = 4.dp)
                                 ) {
                                     Text(
@@ -703,13 +704,13 @@ fun Quiz(navController: NavController, modifier: Modifier = Modifier, matpel: St
                                         .requiredWidth(width = 160.dp)
                                         .wrapContentHeight()
                                         .background(
-                                            color = if (indexTerpilih4 == index) Color.Yellow else Color.Gray,
+                                            color = when {
+                                                jawaban == jwb4 -> Color.Green
+                                                jawaban == jawabanTerpilih4 && jawaban != jwb4 -> Color.Red
+                                                else -> Color.Gray
+                                            }
                                         )
                                         .clip(shape = RoundedCornerShape(30.dp))
-                                        .clickable {
-                                            jawabanTerpilih4 = jawaban
-                                            indexTerpilih4 = index
-                                        }
                                         .padding(horizontal = 8.dp, vertical = 4.dp)
                                 ) {
                                     Text(
@@ -741,13 +742,13 @@ fun Quiz(navController: NavController, modifier: Modifier = Modifier, matpel: St
                                         .requiredWidth(width = 160.dp)
                                         .wrapContentHeight()
                                         .background(
-                                            color = if (indexTerpilih4 == index) Color.Yellow else Color.Gray,
+                                            color = when {
+                                                jawaban == jwb4 -> Color.Green
+                                                jawaban == jawabanTerpilih4 && jawaban != jwb4 -> Color.Red
+                                                else -> Color.Gray
+                                            }
                                         )
                                         .clip(shape = RoundedCornerShape(30.dp))
-                                        .clickable {
-                                            jawabanTerpilih4 = jawaban
-                                            indexTerpilih4 = index
-                                        }
                                         .padding(horizontal = 8.dp, vertical = 4.dp)
                                 ) {
                                     Text(
@@ -809,13 +810,13 @@ fun Quiz(navController: NavController, modifier: Modifier = Modifier, matpel: St
                                         .requiredWidth(width = 160.dp)
                                         .wrapContentHeight()
                                         .background(
-                                            color = if (indexTerpilih5 == index) Color.Yellow else Color.Gray,
+                                            color = when {
+                                                jawaban == jwb5 -> Color.Green
+                                                jawaban == jawabanTerpilih5 && jawaban != jwb5 -> Color.Red
+                                                else -> Color.Gray
+                                            }
                                         )
                                         .clip(shape = RoundedCornerShape(30.dp))
-                                        .clickable {
-                                            jawabanTerpilih5 = jawaban
-                                            indexTerpilih5 = index
-                                        }
                                         .padding(horizontal = 8.dp, vertical = 4.dp)
                                 ) {
                                     Text(
@@ -847,13 +848,13 @@ fun Quiz(navController: NavController, modifier: Modifier = Modifier, matpel: St
                                         .requiredWidth(width = 160.dp)
                                         .wrapContentHeight()
                                         .background(
-                                            color = if (indexTerpilih5 == index) Color.Yellow else Color.Gray,
+                                            color = when {
+                                                jawaban == jwb5 -> Color.Green
+                                                jawaban == jawabanTerpilih5 && jawaban != jwb5 -> Color.Red
+                                                else -> Color.Gray
+                                            }
                                         )
                                         .clip(shape = RoundedCornerShape(30.dp))
-                                        .clickable {
-                                            jawabanTerpilih5 = jawaban
-                                            indexTerpilih5 = index
-                                        }
                                         .padding(horizontal = 8.dp, vertical = 4.dp)
                                 ) {
                                     Text(
@@ -892,10 +893,6 @@ fun Quiz(navController: NavController, modifier: Modifier = Modifier, matpel: St
                 contentDescription = "Gambar Logo",
                 modifier = Modifier
                     .align(alignment = Alignment.TopStart)
-                    .offset(
-                        x = 0.dp,
-                        y = 0.dp
-                    )
                     .requiredWidth(width = 45.dp)
                     .requiredHeight(height = 48.dp)
             )
@@ -911,7 +908,7 @@ fun Quiz(navController: NavController, modifier: Modifier = Modifier, matpel: St
                     navController.navigate("materi/$matpel/$materi")
                 })
         Text(
-            text = "Home > Materi > $matpel > $materi > Quiz",
+            text = "Home > Materi > $matpel > $materi > Quiz > Hasil > Review",
             color = Color.White,
             textAlign = TextAlign.Center,
             style = TextStyle(
@@ -920,7 +917,7 @@ fun Quiz(navController: NavController, modifier: Modifier = Modifier, matpel: St
             modifier = Modifier
                 .align(alignment = Alignment.TopStart)
                 .offset(x = 10.dp,
-                    y = 75.dp)
+                    y = 70.dp)
                 .requiredWidth(width = 410.dp)
         )
         Box(
@@ -946,27 +943,7 @@ fun Quiz(navController: NavController, modifier: Modifier = Modifier, matpel: St
                     .requiredWidth(width = 172.dp)
                     .requiredHeight(height = 175.dp)
                     .clickable {
-                        val correctAnswers = listOf(jwb1, jwb2, jwb3, jwb4, jwb5)
-                        val selectedAnswers = listOf(jawabanTerpilih1, jawabanTerpilih2, jawabanTerpilih3, jawabanTerpilih4, jawabanTerpilih5)
-                        val hasil = HitungQuiz(selectedAnswers, correctAnswers)
-
-                        firestoreHelper.updateQuiz("$matpel", "$materi", "jawaban", "terpilih1", "$jawabanTerpilih1") { success ->
-                        }
-                        firestoreHelper.updateQuiz("$matpel", "$materi", "jawaban", "terpilih2", "$jawabanTerpilih2") { success ->
-
-                        }
-                        firestoreHelper.updateQuiz("$matpel", "$materi", "jawaban", "terpilih3", "$jawabanTerpilih3") { success ->
-
-                        }
-                        firestoreHelper.updateQuiz("$matpel", "$materi", "jawaban", "terpilih4", "$jawabanTerpilih4") { success ->
-
-                        }
-                        firestoreHelper.updateQuiz("$matpel", "$materi", "jawaban", "terpilih5", "$jawabanTerpilih5") { success ->
-                            if (success) {
-                                Toast.makeText(context, "Jawaban berhasil disimpan", Toast.LENGTH_SHORT).show()
-                            }
-                        }
-                        navController.navigate("hasil/$matpel/$materi/$hasil")
+                        navController.navigate("materi/$matpel/$materi")
                     })
         }
     }

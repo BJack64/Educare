@@ -1,9 +1,13 @@
 package com.example.mobileapplication
 
+import android.util.Log
+import android.webkit.WebView
+import android.webkit.WebViewClient
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.requiredHeight
 import androidx.compose.foundation.layout.requiredSize
@@ -12,21 +16,77 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.viewinterop.AndroidView
 import androidx.navigation.NavController
 
 @Composable
-fun Materi(navController: NavController, modifier: Modifier = Modifier) {
+fun WebPageViewer(url: String?, modifier: Modifier = Modifier) {
+    if (!url.isNullOrEmpty()) {
+        AndroidView(
+            factory = { context ->
+                WebView(context).apply {
+                    settings.javaScriptEnabled = true
+                    settings.setSupportZoom(true)
+                    settings.builtInZoomControls = true
+                    settings.displayZoomControls = false
+                    isVerticalScrollBarEnabled = true
+                    isHorizontalScrollBarEnabled = true
+                    webViewClient = WebViewClient()
+                    loadUrl(url)
+                }
+            },
+            modifier = modifier
+        )
+    } else {
+        Log.e("WebPageViewer", "The URL is null or empty.")
+    }
+}
+
+@Composable
+fun Materi(navController: NavController, modifier: Modifier = Modifier, materi: String?, matpel: String?) {
+    var link by remember { mutableStateOf("") }
+    val firestoreHelper = FirestoreHelper()
+
+    val backgroundImg = if (matpel == "indonesia") {
+        R.drawable.bg_ind
+    } else if (matpel == "matematika") {
+        R.drawable.bg_mat
+    } else if (matpel == "inggris") {
+        R.drawable.bg_ing
+    } else if (matpel == "ipa") {
+        R.drawable.bg_ipa
+    } else if (matpel == "ips") {
+        R.drawable.bg_ips
+    } else {
+        R.drawable.bg_pkn
+    }
+
+    LaunchedEffect(Unit) {
+        firestoreHelper.readLinkMateri("$matpel", "$materi") { linkMateri ->
+            if (linkMateri != null) {
+                link = linkMateri
+            }
+        }
+    }
+
     Box(
         modifier = modifier
             .requiredWidth(width = 430.dp)
@@ -42,7 +102,7 @@ fun Materi(navController: NavController, modifier: Modifier = Modifier) {
                 .requiredHeight(height = 909.dp)
         ) {
             Image(
-                painter = painterResource(id = R.drawable.bg_hasil_quiz_indo),
+                painter = painterResource(id = backgroundImg),
                 contentDescription = "Rectangle 39372",
                 modifier = Modifier
                     .align(alignment = Alignment.TopStart)
@@ -50,7 +110,6 @@ fun Materi(navController: NavController, modifier: Modifier = Modifier) {
                         y = 0.dp)
                     .requiredWidth(width = 430.dp)
                     .requiredHeight(height = 876.dp))
-
 
             Box(
                 modifier = Modifier
@@ -116,24 +175,14 @@ fun Materi(navController: NavController, modifier: Modifier = Modifier) {
                     .requiredWidth(width = 430.dp)
                     .requiredHeight(height = 589.dp)
             ) {
-                Box(
+                WebPageViewer(
+                    url = link,
                     modifier = Modifier
-                        .requiredWidth(380.dp)
-                        .requiredHeight(100.dp)
-                        .clip(shape = RoundedCornerShape(15.dp))
-                        .background(color = Color(0xfff6f2f2))
-                        .offset(x = -505.dp)
+                        .requiredWidth(400.dp)
+                        .requiredHeight(700.dp)
+                        .offset(x = -10.dp, y = 8.dp)
                 )
 
-                Image(
-                    painter = painterResource(id = R.drawable.materi_ind),
-                    contentDescription = "Materi",
-                    modifier = Modifier
-                        .requiredWidth(422.dp)
-                        .requiredHeight(534.dp)
-                        .offset(x = -20.dp,
-                            y = 120.dp)
-                )
                 Box(
                     modifier = Modifier
                         .align(alignment = Alignment.TopStart)
@@ -152,7 +201,7 @@ fun Materi(navController: NavController, modifier: Modifier = Modifier) {
                                 y = 175.dp)
                             .clip(shape = RoundedCornerShape(30.dp))
                             .clickable {
-                                navController.navigate("quiz")
+                                navController.navigate("quiz/$matpel/$materi")
                             })
                 }
             }
@@ -163,41 +212,7 @@ fun Materi(navController: NavController, modifier: Modifier = Modifier) {
                         y = 98.dp)
                     .requiredWidth(width = 335.dp)
                     .requiredHeight(height = 86.dp)
-            ) {
-                Box(
-                    modifier = Modifier
-                        .requiredWidth(width = 99.dp)
-                        .requiredHeight(height = 86.dp)
-                ) {
-                    Box(
-                        modifier = Modifier
-                            .align(alignment = Alignment.TopStart)
-                            .offset(x = 44.dp,
-                                y = -2.dp)
-                            .requiredWidth(width = 90.dp)
-                            .requiredHeight(height = 90.dp)
-                            .clip(CircleShape)
-                            .background(color = Color(0xff828282).copy(alpha = 0.92f)))
-                    Box(
-                        modifier = Modifier
-                            .align(alignment = Alignment.TopStart)
-                            .offset(x = 46.dp,
-                                y = -2.dp)
-                            .requiredWidth(width = 86.dp)
-                            .requiredHeight(height = 86.dp)
-                            .clip(CircleShape)
-                            .background(color = Color(0xffE82441).copy(alpha = 0.92f)))
-                    Image(
-                        painter = painterResource(id = R.drawable.logo_ind),
-                        contentDescription = "Rectangle 39384",
-                        contentScale = ContentScale.Crop,
-                        modifier = Modifier
-                            .align(alignment = Alignment.TopStart)
-                            .offset(x = 40.dp,
-                                y = 4.138671875.dp)
-                            .requiredWidth(width = 99.dp)
-                            .requiredHeight(height = 79.dp))
-                }
+            )
                 Box(
                     modifier = Modifier
                         .align(alignment = Alignment.TopStart)
@@ -205,33 +220,7 @@ fun Materi(navController: NavController, modifier: Modifier = Modifier) {
                             y = 16.dp)
                         .requiredWidth(width = 230.dp)
                         .requiredHeight(height = 54.dp)
-                ) {
-                    Text(
-                        text = "Pantun",
-                        color = Color.Black,
-                        textAlign = TextAlign.Center,
-                        style = TextStyle(
-                            fontSize = 40.sp),
-                        modifier = Modifier
-                            .align(alignment = Alignment.TopStart)
-                            .offset(x = -10.dp,
-                                y = 1.dp)
-                            .requiredWidth(width = 225.dp)
-                            .requiredHeight(height = 52.dp))
-                    Text(
-                        text = "Pantun",
-                        color = Color(0xffe82441),
-                        textAlign = TextAlign.Center,
-                        style = TextStyle(
-                            fontSize = 40.sp),
-                        modifier = Modifier
-                            .align(alignment = Alignment.TopStart)
-                            .offset(x = -10.dp,
-                                y = 0.dp)
-                            .requiredWidth(width = 228.dp)
-                            .requiredHeight(height = 54.dp))
-                }
-            }
+                )
             Box(
                 modifier = Modifier
                     .align(alignment = Alignment.TopStart)
@@ -241,10 +230,22 @@ fun Materi(navController: NavController, modifier: Modifier = Modifier) {
                     .requiredHeight(height = 55.dp)
                     .background(color = Color.Black.copy(alpha = 0.1f))
                     .clickable {
-                        navController.navigate("indonesia")
+                        if(matpel == "indonesia") {
+                            navController.navigate("indonesia")
+                        } else if (matpel == "matematika") {
+                            navController.navigate("matematika")
+                        } else if (matpel == "inggris") {
+                            navController.navigate("inggris")
+                        } else if (matpel == "ipa") {
+                            navController.navigate("ipa")
+                        } else if (matpel == "ips") {
+                            navController.navigate("ips")
+                        } else {
+                            navController.navigate("pkn")
+                        }
                     })
             Text(
-                text = "Home > Materi > Bahasa Indonesia > Pantun",
+                text = "Home > Materi > $matpel > $materi",
                 color = Color.White,
                 textAlign = TextAlign.Center,
                 style = TextStyle(
@@ -252,25 +253,25 @@ fun Materi(navController: NavController, modifier: Modifier = Modifier) {
                 modifier = Modifier
                     .align(alignment = Alignment.TopStart)
                     .offset(x = 37.dp,
-                        y = 10.dp)
+                        y = 15.dp)
                     .requiredWidth(width = 410.dp))
         }
         Box(
             modifier = Modifier
                 .align(alignment = Alignment.TopStart)
-                .offset(x = 5.dp,
-                    y = 5.dp)
-                .requiredSize(size = 100.dp)
+                .offset(x = 10.dp,
+                    y = 8.dp)
+                .requiredSize(size = 200.dp)
         ) {
             Image(
                 painter = painterResource(id = R.drawable.logo_educare),
                 contentDescription = "Logo Educare",
                 modifier = Modifier
                     .align(alignment = Alignment.TopStart)
-                    .offset(x = 16.425048828125.dp,
-                        y = 40.0751953125.dp)
-                    .requiredWidth(width = 30.dp)
-                    .requiredHeight(height = 33.dp))
+                    .offset(x = 10.dp,
+                        y = 25.dp)
+                    .requiredWidth(width = 45.dp)
+                    .requiredHeight(height = 48.dp))
 
 
         }

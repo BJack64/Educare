@@ -19,10 +19,11 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-
+import androidx.navigation.navArgument
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -31,70 +32,6 @@ class MainActivity : ComponentActivity() {
             MaterialTheme {
                 Navigation()
             }
-        }
-    }
-}
-
-@Composable
-fun Opening(modifier: Modifier = Modifier) {
-    Box(
-        modifier = modifier
-            .requiredWidth(width = 430.dp)
-            .requiredHeight(height = 932.dp)
-            .background(color = Color(0xffc6cbe0))
-    ) {
-        Image(
-            painter = painterResource(id = R.drawable.ic_profile_placeholder),
-            contentDescription = "Rectangle 39372",
-            modifier = Modifier
-                .align(alignment = Alignment.TopStart)
-                .offset(x = 15.dp,
-                    y = 16.dp)
-                .requiredWidth(width = 400.dp)
-                .requiredHeight(height = 900.dp)
-                .clip(shape = RoundedCornerShape(20.dp)))
-        Image(
-            painter = painterResource(id = R.drawable.ic_profile_placeholder),
-            contentDescription = "Rectangle 39373",
-            modifier = Modifier
-                .align(alignment = Alignment.TopStart)
-                .offset(x = 30.dp,
-                    y = 31.dp)
-                .requiredWidth(width = 370.dp)
-                .requiredHeight(height = 870.dp)
-                .clip(shape = RoundedCornerShape(20.dp)))
-        Box(
-            modifier = Modifier
-                .align(alignment = Alignment.TopStart)
-                .offset(x = 35.dp,
-                    y = 36.dp)
-                .requiredWidth(width = 360.dp)
-                .requiredHeight(height = 860.dp)
-                .clip(shape = RoundedCornerShape(20.dp))
-                .background(color = Color(0xfff6f2f2))
-                .border(border = BorderStroke(1.dp, Color.Black.copy(alpha = 0.1f)),
-                    shape = RoundedCornerShape(20.dp)))
-        Box(
-            modifier = Modifier
-                .align(alignment = Alignment.TopStart)
-                .offset(x = 65.dp,
-                    y = 316.dp)
-                .requiredSize(size = 300.dp)
-        ) {
-            Box(
-                modifier = Modifier
-                    .requiredSize(size = 300.dp)
-                    .clip(shape = CircleShape)
-                    .background(color = Color.White))
-            Image(
-                painter = painterResource(id = R.drawable.ic_profile_placeholder),
-                contentDescription = "WhatsApp Image 2024-10-28 at 15.17.37 1",
-                modifier = Modifier
-                    .align(alignment = Alignment.TopStart)
-                    .offset(x = 49.5.dp,
-                        y = 40.5.dp)
-                    .requiredWidth(width = 201.dp)
-                    .requiredHeight(height = 219.dp))
         }
     }
 }
@@ -111,17 +48,68 @@ fun Navigation() {
         composable("ipa") { IPA(navController) }
         composable("ips") { IPS(navController) }
         composable("pkn") { PKN(navController) }
-        composable("materi") { Materi(navController) }
-        composable("quiz") { Quiz(navController) }
-        composable("hasil") { HasilQuiz(navController) }
-        composable("review") { ReviewQuiz(navController) }
-    }
-}
+        composable(
+            route = "materi/{matpel}/{materi}",
+            arguments = listOf(
+                navArgument("matpel") { type = NavType.StringType },
+                navArgument("materi") { type = NavType.StringType }
+            )
+        ) { backStackEntry ->
+            val matpel = backStackEntry.arguments?.getString("matpel")
+            val materi = backStackEntry.arguments?.getString("materi")
+            Materi(navController, matpel = matpel, materi = materi)
+        }
+        composable(
+            route = "quiz/{matpel}/{materi}",
+            arguments = listOf(
+                navArgument("matpel") { type = NavType.StringType },
+                navArgument("materi") { type = NavType.StringType }
+            )
+        ) { backStackEntry ->
+            val matpel = backStackEntry.arguments?.getString("matpel")
+            val materi = backStackEntry.arguments?.getString("materi")
+            Quiz(navController, matpel = matpel, materi = materi)
+        }
+        composable(
+            route = "hasil/{matpel}/{materi}/{hasil}",
+            arguments = listOf(
+                navArgument("matpel") { type = NavType.StringType },
+                navArgument("materi") { type = NavType.StringType },
+                navArgument("hasil") { type = NavType.IntType; defaultValue = 0 }
+            )
+        ) { backStackEntry ->
+            val matpel = backStackEntry.arguments?.getString("matpel")
+            val materi = backStackEntry.arguments?.getString("materi")
+            val hasil = backStackEntry.arguments?.getInt("hasil") ?: 0
 
-@Preview
-@Composable
-private fun OpeningPreview() {
-    Opening(Modifier)
+            HasilQuiz(navController, matpel = matpel, materi = materi, hasil = hasil)
+        }
+        composable(
+            route = "review/{matpel}/{materi}",
+            arguments = listOf(
+                navArgument("matpel") { type = NavType.StringType },
+                navArgument("materi") { type = NavType.StringType }
+            )
+        ) { backStackEntry ->
+            val matpel = backStackEntry.arguments?.getString("matpel")
+            val materi = backStackEntry.arguments?.getString("materi")
+            ReviewQuiz(navController, matpel = matpel, materi = materi)
+        }
+        composable("admin_login") { AdminLogin(navController) }
+        composable("admin") { Admin(navController) }
+        composable("about") { About(navController) }
+        composable(
+            route = "admin_screen/{matpel}/{materi}",
+            arguments = listOf(
+                navArgument("matpel") { type = NavType.StringType },
+                navArgument("materi") { type = NavType.StringType }
+            )
+        ) { backStackEntry ->
+            val matpel = backStackEntry.arguments?.getString("matpel")
+            val materi = backStackEntry.arguments?.getString("materi")
+            AdminScreen(navController, matpel = matpel, materi = materi)
+        }
+    }
 }
 
 @Preview()

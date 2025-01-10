@@ -1,5 +1,6 @@
 package com.example.mobileapplication
 
+import android.util.Log
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
@@ -7,6 +8,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.offset
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.requiredHeight
 import androidx.compose.foundation.layout.requiredSize
 import androidx.compose.foundation.layout.requiredWidth
@@ -15,6 +17,11 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -40,7 +47,7 @@ fun Indonesia(navController: NavController, modifier: Modifier = Modifier) {
             modifier = Modifier
                 .align(alignment = Alignment.TopStart)
                 .offset(x = 4.dp,
-                    y = 55.dp)
+                    y = 75.dp)
                 .requiredWidth(width = 430.dp)
                 .requiredHeight(height = 200.dp)
                 .background(color = Color(0xffE82441))
@@ -49,7 +56,7 @@ fun Indonesia(navController: NavController, modifier: Modifier = Modifier) {
             modifier = Modifier
                 .align(alignment = Alignment.TopStart)
                 .offset(x = 4.dp,
-                    y = 473.dp)
+                    y = 443.dp)
                 .requiredWidth(width = 430.dp)
                 .requiredHeight(height = 436.dp)
         ) {
@@ -67,10 +74,11 @@ fun Indonesia(navController: NavController, modifier: Modifier = Modifier) {
                 color = Color.Black,
                 textAlign = TextAlign.Center,
                 style = TextStyle(
-                    fontSize = 20.sp),
+                    fontSize = 40.sp),
                 modifier = Modifier
+                    .offset(y = -20.dp)
                     .requiredWidth(width = 430.dp)
-                    .requiredHeight(height = 27.dp))
+                    .requiredHeight(height = 40.dp))
             Box(
                 modifier = Modifier
                     .align(alignment = Alignment.TopStart)
@@ -81,12 +89,17 @@ fun Indonesia(navController: NavController, modifier: Modifier = Modifier) {
                     .clip(shape = RoundedCornerShape(10.dp))
                     .background(color = Color(0xffF6F2F2))
                     .border(border = BorderStroke(1.dp, Color.Black.copy(alpha = 0.05f)),
-                        shape = RoundedCornerShape(10.dp)))
+                        shape = RoundedCornerShape(10.dp))
+                    .clickable {
+                        var matpel = "indonesia"
+                        var materi = "surat_kerja"
+                        navController.navigate("materi/$matpel/$materi")
+                    })
             Text(
-                text = "Nama Materi",
+                text = "Surat Kerja",
                 color = Color.Black,
                 style = TextStyle(
-                    fontSize = 12.sp),
+                    fontSize = 15.sp),
                 modifier = Modifier
                     .align(alignment = Alignment.TopStart)
                     .offset(x = 148.dp,
@@ -97,11 +110,20 @@ fun Indonesia(navController: NavController, modifier: Modifier = Modifier) {
                 modifier = Modifier
                     .align(alignment = Alignment.TopStart)
                     .offset(x = 148.dp,
-                        y = 367.06982421875.dp)
-                    .requiredWidth(width = 160.dp)
-                    .requiredHeight(height = 17.dp)
-                    .clip(shape = RoundedCornerShape(30.dp))
-                    .background(color = Color(0xffD9D9D9)))
+                        y = 357.dp)
+                    .requiredWidth(width = 230.dp)
+                    .requiredHeight(height = 50.dp)
+                    .background(color = Color(0xffD9D9D9))
+            ) {
+                Text(
+                    text = "Pelajari lebih lanjut cara membuat surat lamaran kerja",
+                    color = Color.Black,
+                    style = TextStyle(fontSize = 12.sp),
+                    modifier = Modifier
+                        .align(Alignment.Center)
+                        .padding(horizontal = 8.dp, vertical = 4.dp)
+                )
+            }
             Box(
                 modifier = Modifier
                     .align(alignment = Alignment.TopStart)
@@ -112,12 +134,17 @@ fun Indonesia(navController: NavController, modifier: Modifier = Modifier) {
                     .clip(shape = RoundedCornerShape(10.dp))
                     .background(color = Color(0xffF6F2F2))
                     .border(border = BorderStroke(1.dp, Color.Black.copy(alpha = 0.05f)),
-                        shape = RoundedCornerShape(10.dp)))
+                        shape = RoundedCornerShape(10.dp))
+                    .clickable {
+                        var matpel = "indonesia"
+                        var materi = "drama"
+                        navController.navigate("materi/$matpel/$materi")
+                    })
             Text(
-                text = "Nama Materi",
+                text = "Drama",
                 color = Color.Black,
                 style = TextStyle(
-                    fontSize = 12.sp),
+                    fontSize = 15.sp),
                 modifier = Modifier
                     .align(alignment = Alignment.TopStart)
                     .offset(x = 148.dp,
@@ -128,11 +155,20 @@ fun Indonesia(navController: NavController, modifier: Modifier = Modifier) {
                 modifier = Modifier
                     .align(alignment = Alignment.TopStart)
                     .offset(x = 148.dp,
-                        y = 235.990234375.dp)
-                    .requiredWidth(width = 160.dp)
-                    .requiredHeight(height = 17.dp)
-                    .clip(shape = RoundedCornerShape(30.dp))
-                    .background(color = Color(0xffD9D9D9)))
+                        y = 225.dp)
+                    .requiredWidth(width = 230.dp)
+                    .requiredHeight(height = 50.dp)
+                    .background(color = Color(0xffD9D9D9))
+            ) {
+                Text(
+                    text = "Melalui materi ini anda akan mempelajari dasar dari seni drama",
+                    color = Color.Black,
+                    style = TextStyle(fontSize = 12.sp),
+                    modifier = Modifier
+                        .align(Alignment.Center)
+                        .padding(horizontal = 8.dp, vertical = 4.dp)
+                )
+            }
             Box(
                 modifier = Modifier
                     .align(alignment = Alignment.TopStart)
@@ -144,7 +180,9 @@ fun Indonesia(navController: NavController, modifier: Modifier = Modifier) {
                     .background(color = Color(0xfff6f2f2))
                     .border(border = BorderStroke(1.dp, Color.Black.copy(alpha = 0.05f)), shape = RoundedCornerShape(10.dp))
                     .clickable {
-                        navController.navigate("materi")
+                        var matpel = "indonesia"
+                        var materi = "pantun"
+                        navController.navigate("materi/$matpel/$materi")
                     }
             )
             Image(
@@ -181,7 +219,7 @@ fun Indonesia(navController: NavController, modifier: Modifier = Modifier) {
                 text = "Pantun",
                 color = Color.Black,
                 style = TextStyle(
-                    fontSize = 12.sp),
+                    fontSize = 15.sp),
                 modifier = Modifier
                     .align(alignment = Alignment.TopStart)
                     .offset(x = 148.dp,
@@ -192,11 +230,20 @@ fun Indonesia(navController: NavController, modifier: Modifier = Modifier) {
                 modifier = Modifier
                     .align(alignment = Alignment.TopStart)
                     .offset(x = 148.dp,
-                        y = 110.56005859375.dp)
-                    .requiredWidth(width = 160.dp)
-                    .requiredHeight(height = 17.dp)
-                    .clip(shape = RoundedCornerShape(30.dp))
-                    .background(color = Color(0xffD9D9D9)))
+                        y = 100.dp)
+                    .requiredWidth(width = 230.dp)
+                    .requiredHeight(height = 50.dp)
+                    .background(color = Color(0xffD9D9D9))
+            ) {
+                Text(
+                    text = "Materi ini akan mengajarkan anda cara membuat pantun",
+                    color = Color.Black,
+                    style = TextStyle(fontSize = 12.sp),
+                    modifier = Modifier
+                        .align(Alignment.Center)
+                        .padding(horizontal = 8.dp, vertical = 4.dp)
+                )
+            }
         }
         Box(
             modifier = Modifier
@@ -275,7 +322,7 @@ fun Indonesia(navController: NavController, modifier: Modifier = Modifier) {
                 modifier = Modifier
                     .align(alignment = Alignment.TopStart)
                     .offset(x = 65.dp,
-                        y = 0.dp)
+                        y = 20.dp)
                     .requiredWidth(width = 430.dp)
                     .requiredHeight(height = 38.dp)
                     .background(color = Color.Black.copy(alpha = 0.1f))
@@ -302,46 +349,7 @@ fun Indonesia(navController: NavController, modifier: Modifier = Modifier) {
                         y = 47.dp)
                     .requiredWidth(width = 395.dp)
                     .requiredHeight(height = 43.dp)
-            ) {
-                Box(
-                    modifier = Modifier
-                        .offset(x = 37.dp)
-                        .requiredWidth(width = 395.dp)
-                        .requiredHeight(height = 43.dp)
-                        .clip(shape = RoundedCornerShape(10.dp))
-                        .background(color = Color(0xffF6F2F2)))
-                {
-                    Box(
-                        modifier = Modifier
-                            .align(alignment = Alignment.TopStart)
-                            .offset(x = 5.dp,
-                                y = 4.dp)
-                            .requiredWidth(width = 383.dp)
-                            .requiredHeight(height = 34.dp)
-                            .clip(shape = RoundedCornerShape(10.dp))
-                            .background(color = Color(0xffF6F2F2))
-                            .border(border = BorderStroke(1.dp, Color.Black.copy(alpha = 0.05f)),
-                                shape = RoundedCornerShape(10.dp)))
-                    Image(
-                        painter = painterResource(id = R.drawable.logo_search),
-                        contentDescription = "Logo Search",
-                        modifier = Modifier
-                            .align(alignment = Alignment.TopStart)
-                            .offset(x = 10.dp,
-                                y = 7.dp)
-                            .requiredWidth(width = 30.dp)
-                            .requiredHeight(height = 29.dp))
-                    Text(
-                        text = "Cari Materi disini",
-                        color = Color(0xff828282),
-                        style = TextStyle(
-                            fontSize = 18.sp),
-                        modifier = Modifier
-                            .align(alignment = Alignment.TopStart)
-                            .offset(x = 127.dp,
-                                y = 13.dp))
-                }
-            }
+            )
         }
         Box(
             modifier = Modifier
@@ -420,53 +428,7 @@ fun Indonesia(navController: NavController, modifier: Modifier = Modifier) {
                     y = 418.dp)
                 .requiredWidth(width = 65.dp)
                 .requiredHeight(height = 38.dp)
-        ) {
-            Box(
-                modifier = Modifier
-                    .requiredWidth(width = 65.dp)
-                    .requiredHeight(height = 38.dp)
-            ) {
-                Box(
-                    modifier = Modifier
-                        .requiredWidth(width = 65.dp)
-                        .requiredHeight(height = 38.dp)
-                        .clip(shape = RoundedCornerShape(10.dp))
-                        .background(color = Color(0xff898686))
-                        .border(border = BorderStroke(1.dp, Color.Black.copy(alpha = 0.7f)),
-                            shape = RoundedCornerShape(10.dp)))
-                Box(
-                    modifier = Modifier
-                        .align(alignment = Alignment.TopStart)
-                        .offset(x = 4.0625.dp,
-                            y = 4.10791015625.dp)
-                        .requiredWidth(width = 57.dp)
-                        .requiredHeight(height = 27.dp)
-                ) {
-                    Text(
-                        text = "SMA",
-                        color = Color.Black,
-                        textAlign = TextAlign.Center,
-                        style = MaterialTheme.typography.headlineSmall,
-                        modifier = Modifier
-                            .align(alignment = Alignment.TopStart)
-                            .offset(x = 0.dp,
-                                y = 1.2587890625.dp)
-                            .requiredWidth(width = 57.dp)
-                            .requiredHeight(height = 26.dp))
-                    Text(
-                        text = "SMA",
-                        color = Color.White,
-                        textAlign = TextAlign.Center,
-                        style = MaterialTheme.typography.headlineSmall,
-                        modifier = Modifier
-                            .align(alignment = Alignment.TopStart)
-                            .offset(x = 3.89697265625.dp,
-                                y = 0.dp)
-                            .requiredWidth(width = 53.dp)
-                            .requiredHeight(height = 26.dp))
-                }
-            }
-        }
+        )
         Box(
             modifier = Modifier
                 .align(alignment = Alignment.TopStart)
@@ -474,53 +436,7 @@ fun Indonesia(navController: NavController, modifier: Modifier = Modifier) {
                     y = 417.dp)
                 .requiredWidth(width = 65.dp)
                 .requiredHeight(height = 39.dp)
-        ) {
-            Box(
-                modifier = Modifier
-                    .requiredWidth(width = 65.dp)
-                    .requiredHeight(height = 39.dp)
-            ) {
-                Box(
-                    modifier = Modifier
-                        .requiredWidth(width = 65.dp)
-                        .requiredHeight(height = 39.dp)
-                        .clip(shape = RoundedCornerShape(10.dp))
-                        .background(color = Color(0xff898686))
-                        .border(border = BorderStroke(1.dp, Color.Black.copy(alpha = 0.7f)),
-                            shape = RoundedCornerShape(10.dp)))
-                Box(
-                    modifier = Modifier
-                        .align(alignment = Alignment.TopStart)
-                        .offset(x = 5.dp,
-                            y = 4.dp)
-                        .requiredWidth(width = 55.dp)
-                        .requiredHeight(height = 29.dp)
-                ) {
-                    Text(
-                        text = "SMP",
-                        color = Color.Black,
-                        textAlign = TextAlign.Center,
-                        style = MaterialTheme.typography.headlineSmall,
-                        modifier = Modifier
-                            .align(alignment = Alignment.TopStart)
-                            .offset(x = 0.dp,
-                                y = 1.9677734375.dp)
-                            .requiredWidth(width = 53.dp)
-                            .requiredHeight(height = 27.dp))
-                    Text(
-                        text = "SMP",
-                        color = Color.White,
-                        textAlign = TextAlign.Center,
-                        style = MaterialTheme.typography.headlineSmall,
-                        modifier = Modifier
-                            .align(alignment = Alignment.TopStart)
-                            .offset(x = 1.959228515625.dp,
-                                y = 0.dp)
-                            .requiredWidth(width = 53.dp)
-                            .requiredHeight(height = 26.dp))
-                }
-            }
-        }
+        )
         Box(
             modifier = Modifier
                 .align(alignment = Alignment.TopStart)
@@ -528,62 +444,14 @@ fun Indonesia(navController: NavController, modifier: Modifier = Modifier) {
                     y = 417.dp)
                 .requiredWidth(width = 56.dp)
                 .requiredHeight(height = 39.dp)
-        ) {
-            Box(
-                modifier = Modifier
-                    .requiredWidth(width = 56.dp)
-                    .requiredHeight(height = 39.dp)
-            ) {
-                Box(
-                    modifier = Modifier
-                        .requiredWidth(width = 56.dp)
-                        .requiredHeight(height = 39.dp)
-                        .clip(shape = RoundedCornerShape(10.dp))
-                        .background(color = Color(0xff898686))
-                        .border(border = BorderStroke(1.dp, Color.Black.copy(alpha = 0.7f)),
-                            shape = RoundedCornerShape(10.dp)))
-                Box(
-                    modifier = Modifier
-                        .align(alignment = Alignment.TopStart)
-                        .offset(x = 10.dp,
-                            y = 5.dp)
-                        .requiredWidth(width = 35.dp)
-                        .requiredHeight(height = 28.dp)
-                ) {
-                    Text(
-                        text = "SD",
-                        color = Color.Black,
-                        textAlign = TextAlign.Center,
-                        style = MaterialTheme.typography.headlineSmall,
-                        modifier = Modifier
-                            .align(alignment = Alignment.TopStart)
-                            .offset(x = 0.dp,
-                                y = 1.39990234375.dp)
-                            .requiredWidth(width = 32.dp)
-                            .requiredHeight(height = 27.dp))
-                    Text(
-                        text = "SD",
-                        color = Color.White,
-                        textAlign = TextAlign.Center,
-                        style = MaterialTheme.typography.headlineSmall,
-                        modifier = Modifier
-                            .requiredWidth(width = 35.dp)
-                            .requiredHeight(height = 27.dp))
-                }
-            }
-        }
+        )
         Box(
             modifier = Modifier
                 .align(alignment = Alignment.TopStart)
-                .offset(x = 6.dp,
-                    y = 6.dp)
-                .requiredSize(size = 45.dp)
+                .offset(x = 15.dp,
+                    y = 30.dp)
+                .requiredSize(size = 100.dp)
         ) {
-            Box(
-                modifier = Modifier
-                    .requiredSize(size = 45.dp)
-                    .clip(shape = CircleShape)
-                    .background(color = Color.White))
             Image(
                 painter = painterResource(id = R.drawable.logo_educare),
                 contentDescription = "Logo Educare",

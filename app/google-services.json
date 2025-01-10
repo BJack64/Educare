@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "1019072505383",
+    "firebase_url": "https://educare-22f26-default-rtdb.asia-southeast1.firebasedatabase.app",
+    "project_id": "educare-22f26",
+    "storage_bucket": "educare-22f26.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1019072505383:android:c5cc59201fd4940d919002",
+        "android_client_info": {
+          "package_name": "com.example.mobileapplication"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBAtn6dM1KQneQUZXwp8eiZt766XvgbF9g"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
